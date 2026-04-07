@@ -138,13 +138,16 @@ export default function App() {
   const analyzePhoto = async (image: string) => {
     setState('analyzing');
     setError(null);
-    setLoadingMessage('Identifying landmark with high precision...');
+    setLoadingMessage('Searching for landmarks and places...');
     try {
       const base64 = image.split(',')[1];
+      
+      // First step: Identification with Google Search enabled
+      setLoadingMessage('Analyzing image content with Google Search...');
       const result = await identifyLandmark(base64);
       
       if (!result.isLandmark) {
-        if (result.confidence < 0.4 || result.type === 'unknown') {
+        if (result.confidence < 0.3 || result.type === 'unknown') {
           setError('No landmark or famous place identified. Please try uploading more pictures or a clearer shot of the location.');
         } else {
           setError(`This appears to be a ${result.type} (${result.name}), not a famous landmark or public place. Lumina Tour is designed for travel and tourism.`);
@@ -153,7 +156,7 @@ export default function App() {
         return;
       }
 
-      setLoadingMessage(`Fetching precise details for ${result.name}...`);
+      setLoadingMessage(`Exhaustively fetching details for ${result.name}...`);
       const details = await fetchLandmarkDetails(result.name);
       setLandmarkInfo(details);
 
@@ -580,12 +583,12 @@ export default function App() {
                   {landmarkInfo.description}
                 </p>
                 
-                <div className="flex space-x-3 pt-2">
+                <div className="grid grid-cols-5 gap-2 pt-2">
                   <motion.button 
                     animate={{ scale: [1, 1.02, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
                     onClick={() => setState('result')}
-                    className="flex-1 bg-pastel-green text-black py-3 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 hover:bg-pastel-green-dark transition-colors active:scale-95 shadow-[0_0_20px_rgba(167,243,208,0.3)]"
+                    className="col-span-3 bg-pastel-green text-black py-3 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 hover:bg-pastel-green-dark transition-colors active:scale-95 shadow-[0_0_20px_rgba(167,243,208,0.3)]"
                   >
                     <Info className="w-4 h-4" />
                     <span>Learn More</span>
@@ -593,7 +596,7 @@ export default function App() {
                   <button 
                     onClick={audioUrl ? toggleAudio : handleGenerateNarration}
                     disabled={isNarrating}
-                    className="bg-pastel-green text-black p-3 rounded-xl hover:bg-pastel-green-dark transition-colors active:scale-95 disabled:opacity-50"
+                    className="col-span-1 bg-pastel-green text-black flex items-center justify-center rounded-xl hover:bg-pastel-green-dark transition-colors active:scale-95 disabled:opacity-50"
                   >
                     {isNarrating ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -607,7 +610,7 @@ export default function App() {
                   </button>
                   <button 
                     onClick={shareLandmark}
-                    className="bg-white/10 p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-colors"
+                    className="col-span-1 bg-white/10 flex items-center justify-center rounded-xl border border-white/10 hover:bg-white/20 transition-colors"
                   >
                     <Share2 className="w-5 h-5" />
                   </button>

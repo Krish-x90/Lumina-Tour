@@ -36,11 +36,12 @@ export async function identifyLandmark(base64Image: string): Promise<Identificat
       {
         parts: [
           { inlineData: { data: base64Image, mimeType: "image/jpeg" } },
-          { text: "Identify the main subject of this image. Determine if it is a famous landmark, a public place, or just a common object/thing (like a poster, furniture, etc.). Provide the name, precise location (if applicable), whether it's a landmark, and its type." },
+          { text: "Exhaustively identify the main subject of this image. Use Google Search to verify if this is a known landmark, public place, historical site, or a specific business/building. If it is a common object, identify it specifically (e.g., 'A poster of the movie Inception'). Provide the name, precise location (if applicable), whether it's a landmark/public place, and its type." },
         ],
       },
     ],
     config: {
+      tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
