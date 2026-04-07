@@ -1,0 +1,7 @@
+{
+  "name": "Lumina Tour",
+  "description": "An AI-powered photo tourism app that recognizes landmarks, fetches historical context via Google Search, and provides narrated AR-style insights.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
